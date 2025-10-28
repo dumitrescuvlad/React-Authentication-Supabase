@@ -18,10 +18,37 @@ function App() {
     });
     return () => subscription.unsubscribe();
   }, []);
+
+  console.log(session?.user?.email);
+
+  const signOut = async () => {
+    await supabase.auth.signOut();
+  };
+  const signUpWithGoogle = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+    });
+  };
+  const signUpWithGithub = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: "github",
+    });
+  };
   if (!session) {
-    return <Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} />;
+    return (
+      <>
+        {/*<Auth supabaseClient={supabase} appearance={{ theme: ThemeSupa }} />;*/}
+        <button onClick={signUpWithGoogle}>Sign in with Google</button>
+        <button onClick={signUpWithGithub}>Sign in with Github</button>
+      </>
+    );
   } else {
-    return <div>Logged in!</div>;
+    return (
+      <div>
+        <h2>Welcome! , {session.user.email}</h2>
+        <button onClick={signOut}>Sign Out</button>
+      </div>
+    );
   }
 }
 
